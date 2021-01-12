@@ -1,0 +1,47 @@
+{% extends 'header.html' %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+
+{% block content%}
+
+<div class="container">
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                Registro de Usuario
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <strong>{{message}}</strong>
+                        </div>
+                       
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <form class="form" method="POST">
+                    {% csrf_token %}
+                    <div class="col col-sm-6">
+                        {{form.as_p}}
+                    </div>
+                   <div class="row">
+                       <div class="col col-md-4">
+                        <button type="submit" class="btn btn-success">Iniciar Sesion</button>
+                       </div>
+                       <div class="col col-md-4">
+                        <a type="button" href="{% url 'register'%}" class="btn btn-primary">Registrar</a>
+                       </div>
+                   </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% bootstrap_javascript jquery='full' %}
+
+{% endblock content %}

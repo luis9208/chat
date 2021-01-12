@@ -1,0 +1,121 @@
+
+{% load static %}
+<html>
+	<head>
+
+		<title>Chat</title>
+		{%load bootstrap4%}
+        {% bootstrap_css %}
+        <link rel="stylesheet" type="text/css" href="{% static '/css/chat.css' %}" />
+        <script type="text/javascript" src="{% static '/js/chat.js' %}"></script>
+	</head>
+	<!--Coded With Love By Mutiullah Samim-->
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
+					<div class="card-header">
+						<div class="input-group">
+							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<div class="input-group-prepend">
+								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="card-body contacts_body">
+						<ul class="contacts">
+						{% for user in users %}
+							<li class="active">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="/api{{user.image.url}}" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>{{user.user.username}}</span>
+									<p>{{user.user.last_login | date}}</p>
+								</div>
+							</div>
+						</li>
+						{% endfor %}
+						</ul>
+					</div>
+					<div class="card-footer"></div>
+				</div></div>
+				<div class="col-md-8 col-xl-6 chat">
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="/api{{current_user.profile.image.url}}" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>{{current_user.username}}</span>
+									<p>{{cant_messages}} Messages</p>
+								</div>
+								<div class="video_cam">
+									<span><i class="fas fa-video"></i></span>
+									<span><i class="fas fa-phone"></i></span>
+								</div>
+							</div>
+							<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+							<div class="action_menu">
+								<ul>
+									<li><i class="fas fa-user-circle"></i> View profile</li>
+									<li><i class="fas fa-users"></i> Add to close friends</li>
+									<li><i class="fas fa-plus"></i> Add to group</li>
+									<li><i class="fas fa-ban"></i> Block</li>
+								</ul>
+							</div>
+						</div>
+						{% comment %} AREA MESSAGES {% endcomment %}
+						<div class="card-body msg_card_body">
+							{% if mensajes %}
+								{% for msg in  mensajes %}
+								{% if current_user.pk == msg.user.pk %}
+									<div class="d-flex justify-content-end mb-4">
+										<div class="msg_cotainer_send">
+											{{msg.content}}
+											<span class="msg_time_send">{{msg.time_send |date}}</span>
+										</div>
+										<div class="img_cont_msg">
+										<img  class="rounded-circle user_img_msg" src="/api{{msg.user.profile.image.url}}">
+										</div>
+									</div>
+								{%else%}
+								<div class="d-flex justify-content-start mb-4">
+									<div class="img_cont_msg">
+										<img src="/api{{msg.user.profile.image.url}}" class="rounded-circle user_img_msg">
+									</div>
+									<div class="msg_cotainer">
+										{{msg.content}} 
+										<span class="msg_time">{{msg.time_send |date}}</span>
+									</div>
+								</div>
+								{% endif %}
+							{% endfor %}
+							{% else %}
+								{{current_user}}
+							{% endif %}
+						</div>
+						<div class="card-footer">
+							<form method="post">
+								{% csrf_token %}
+								<div class="type_msg">
+									{% comment %} <div class="input-group-append">
+										<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+									</div> {% endcomment %}
+									{{form.as_p}}
+								</div>
+									<button type="submit" class="btn btn-primary" id="boton">Enviar</button>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        {% bootstrap_javascript jquery='full' %}
+	</body>
+</html>
